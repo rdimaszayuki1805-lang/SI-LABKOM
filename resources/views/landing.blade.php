@@ -1,22 +1,35 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="SI-LABKOM - Sistem Informasi Pengelolaan Laboratorium Komputer MTs Al Ittihadiyah Pekanbaru.">
 
     <title>SI-LABKOM | MTs Al Ittihadiyah Pekanbaru</title>
 
+    <!-- CSS UTAMA -->
     <style>
         {!! file_get_contents(resource_path('css/app.css')) !!}
     </style>
 
+    <!-- CSS LANDING -->
     <style>
         {!! file_get_contents(resource_path('css/landing.css')) !!}
     </style>
+
 </head>
 
 <body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="main-header">
 
@@ -24,21 +37,21 @@
 
         <div class="header-inner">
 
-            <a href="{{ route('landing') }}" class="header-brand">
+            <!-- BRAND SEKOLAH -->
+            <a href="{{ route('landing') }}"
+               class="header-brand">
 
                 <div class="header-logos">
 
                     <img
                         src="{{ asset('images/logomts.png') }}"
                         alt="Logo MTs Al Ittihadiyah"
-                        class="header-logo"
-                    >
+                        class="header-logo">
 
                     <img
                         src="{{ asset('images/logoykpi.jpg') }}"
                         alt="Logo YKPI"
-                        class="header-logo"
-                    >
+                        class="header-logo">
 
                 </div>
 
@@ -49,30 +62,35 @@
                     </div>
 
                     <div class="school-name">
-                        Sistem Informasi Pengelolaan Laboratorium Komputer
+                        Sistem Informasi Pengelolaan
+                        Laboratorium Komputer
                     </div>
 
                 </div>
 
             </a>
 
-
+            <!-- HEADER ACTION -->
             <div class="header-actions">
 
+                <!-- LOGIN SISWA -->
                 <a
-                    href="{{ route('logbook.siswa') }}"
-                    class="header-btn header-btn-outline"
-                >
+                    href="{{ route('siswa.login') }}"
+                    class="header-btn header-btn-outline">
+
                     <span class="btn-icon">▣</span>
                     Logbook Siswa
+
                 </a>
 
+                <!-- LOGIN PENGELOLA -->
                 <a
                     href="{{ route('login') }}"
-                    class="header-btn header-btn-primary"
-                >
+                    class="header-btn header-btn-primary">
+
                     <span class="btn-icon">↪</span>
                     Login
+
                 </a>
 
             </div>
@@ -84,6 +102,10 @@
 </header>
 
 
+<!-- =====================================================
+     HERO SECTION
+===================================================== -->
+
 <main class="hero-section">
 
     <div class="hero-decoration hero-decoration-right"></div>
@@ -93,12 +115,17 @@
 
         <div class="hero-grid">
 
-            <!-- BAGIAN KIRI -->
+            <!-- =================================================
+                 BAGIAN KIRI
+            ================================================= -->
+
             <section class="hero-left">
 
                 <div class="hero-eyebrow">
+
                     <span>▣</span>
                     Pengelolaan Laboratorium Komputer
+
                 </div>
 
                 <h1 class="hero-title">
@@ -116,7 +143,7 @@
                     hingga penyajian laporan dalam satu sistem.
                 </p>
 
-
+                <!-- INFORMASI SEKOLAH -->
                 <div class="school-info">
 
                     <div class="school-info-icon">
@@ -129,7 +156,7 @@
 
                 </div>
 
-
+                <!-- FITUR -->
                 <div class="feature-list">
 
                     <div class="feature-chip">
@@ -162,7 +189,10 @@
             </section>
 
 
-            <!-- BAGIAN KANAN -->
+            <!-- =================================================
+                 BAGIAN KANAN
+            ================================================= -->
+
             <section class="hero-right">
 
                 <div class="access-wrapper">
@@ -179,14 +209,15 @@
 
                     </div>
 
-
                     <div class="access-stack">
 
-                        <!-- SISWA -->
+                        <!-- =====================================
+                             AKSES SISWA
+                        ====================================== -->
+
                         <a
-                            href="{{ route('logbook.siswa') }}"
-                            class="access-link"
-                        >
+                            href="{{ route('siswa.login') }}"
+                            class="access-link">
 
                             <div class="access-card">
 
@@ -205,8 +236,10 @@
                                     </h3>
 
                                     <p class="access-description">
-                                        Catat penggunaan komputer dan kondisi perangkat
-                                        setelah kegiatan pembelajaran di laboratorium.
+                                        Masuk menggunakan NISN dan password
+                                        untuk mencatat penggunaan komputer,
+                                        kondisi perangkat, serta aktivitas
+                                        pembelajaran di laboratorium.
                                     </p>
 
                                 </div>
@@ -220,11 +253,13 @@
                         </a>
 
 
-                        <!-- LOGIN -->
+                        <!-- =====================================
+                             AKSES PENGELOLA
+                        ====================================== -->
+
                         <a
                             href="{{ route('login') }}"
-                            class="access-link"
-                        >
+                            class="access-link">
 
                             <div class="access-card">
 
@@ -243,8 +278,9 @@
                                     </h3>
 
                                     <p class="access-description">
-                                        Masuk ke sistem untuk mengakses fitur sesuai
-                                        dengan hak akses masing-masing pengguna.
+                                        Masuk menggunakan email dan password
+                                        untuk mengakses fitur laboratorium
+                                        sesuai hak akses masing-masing pengguna.
                                     </p>
 
                                 </div>
@@ -260,14 +296,16 @@
                     </div>
 
 
+                    <!-- INFORMASI LOGIN -->
                     <div class="access-note">
 
                         <span class="note-icon">ⓘ</span>
 
                         <span>
-                            Siswa dapat mengisi logbook tanpa login.
-                            Guru, Penanggung Jawab Laboratorium, dan Kepala Madrasah
-                            masuk menggunakan akun yang telah tersedia.
+                            Siswa wajib login menggunakan NISN dan password
+                            sebelum mengisi logbook. Guru, Penanggung Jawab
+                            Laboratorium, dan Kepala Madrasah login menggunakan
+                            email dan password yang telah terdaftar.
                         </span>
 
                     </div>
