@@ -2,21 +2,18 @@
 
 namespace App\Models;
 
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Validation\ValidationException;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /*
     |--------------------------------------------------------------------------
-    | ROLE PENGGUNA
+    | KONSTANTA ROLE
     |--------------------------------------------------------------------------
     */
 
@@ -25,18 +22,15 @@ class User extends Authenticatable
     public const ROLE_KAMAD = 'kamad';
     public const ROLE_SISWA = 'siswa';
 
-    /*
-    |--------------------------------------------------------------------------
-    | AKUN UTAMA
-    |--------------------------------------------------------------------------
-    */
-
     public const EMAIL_PJLAB = 'pjlab@gmail.com';
 
+
     /*
     |--------------------------------------------------------------------------
-    | MASS ASSIGNMENT
+    | FILLABLE
     |--------------------------------------------------------------------------
+    | is_protected sengaja tidak dimasukkan.
+    | Hanya seeder yang boleh menetapkan akun terlindungi.
     */
 
     protected $fillable = [
@@ -44,11 +38,13 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'is_active',
     ];
+
 
     /*
     |--------------------------------------------------------------------------
-    | HIDDEN ATTRIBUTES
+    | HIDDEN
     |--------------------------------------------------------------------------
     */
 
@@ -57,9 +53,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
     /*
     |--------------------------------------------------------------------------
-    | ATTRIBUTE CASTS
+    | CASTS
     |--------------------------------------------------------------------------
     */
 
@@ -69,12 +66,57 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_protected' => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 
+
     /*
     |--------------------------------------------------------------------------
-    | ROLE CHECK
+    | PERLINDUNGAN AKUN PJ LAB UTAMA
+    |--------------------------------------------------------------------------
+    */
+
+    protected static function booted(): void
+    {
+        static::updating(function (User $user) {
+
+            // Lindungi akun yang sejak awal ditandai protected.
+            if (!$user->getRawOriginal('is_protected')) {
+                return;
+            }
+
+            // Laravel tetap boleh memperbarui remember_token.
+            $allowedFields = ['remember_token'];
+
+            $changedFields = array_keys($user->getDirty());
+
+            $notAllowed = array_diff(
+                $changedFields,
+                $allowedFields
+            );
+
+            if (!empty($notAllowed)) {
+                throw new \RuntimeException(
+                    'Akun PJ Lab utama tidak boleh diubah.'
+                );
+            }
+        });
+
+        static::deleting(function (User $user) {
+
+            if ($user->is_protected) {
+                throw new \RuntimeException(
+                    'Akun PJ Lab utama tidak boleh dihapus.'
+                );
+            }
+        });
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPER ROLE
     |--------------------------------------------------------------------------
     */
 
@@ -98,80 +140,6 @@ class User extends Authenticatable
         return $this->role === self::ROLE_SISWA;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | AKUN UTAMA TERLINDUNGI
-    |--------------------------------------------------------------------------
-    */
-
-    public function isMainPjLab(): bool
-    {
-        return $this->email === self::EMAIL_PJLAB
-            || $this->is_protected === true;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROTEKSI MODEL
-    |--------------------------------------------------------------------------
-    */
-
-    protected static function booted(): void
-    {
-        static::creating(function (User $user) {
-            if ($user->email === self::EMAIL_PJLAB) {
-                if (
-                    $user->role !== self::ROLE_PJLAB ||
-                    !$user->is_protected
-                ) {
-                    throw ValidationException::withMessages([
-                        'email' => 'Email ini khusus akun utama PJ Lab.',
-                    ]);
-                }
-            }
-        });
-
-        static::updating(function (User $user) {
-            $wasProtected =
-                $user->getRawOriginal('email') === self::EMAIL_PJLAB
-                || (bool) $user->getRawOriginal('is_protected');
-
-            if (!$wasProtected) {
-                if ($user->email === self::EMAIL_PJLAB) {
-                    throw ValidationException::withMessages([
-                        'email' => 'Email utama PJ Lab tidak dapat digunakan.',
-                    ]);
-                }
-
-                return;
-            }
-
-            /*
-             * Hanya remember_token yang boleh berubah,
-             * agar fitur Ingat Saya tetap berfungsi.
-             */
-            $changed = array_keys($user->getDirty());
-
-            $notAllowed = array_diff(
-                $changed,
-                ['remember_token']
-            );
-
-            if (!empty($notAllowed)) {
-                throw ValidationException::withMessages([
-                    'user' => 'Akun utama PJ Lab tidak dapat diubah.',
-                ]);
-            }
-        });
-
-        static::deleting(function (User $user) {
-            if ($user->isMainPjLab()) {
-                throw ValidationException::withMessages([
-                    'user' => 'Akun utama PJ Lab tidak dapat dihapus.',
-                ]);
-            }
-        });
-    }
 
     /*
     |--------------------------------------------------------------------------

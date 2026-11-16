@@ -16,12 +16,12 @@ class LoginController extends Controller
     |--------------------------------------------------------------------------
     | 1. MENAMPILKAN HALAMAN LOGIN
     |--------------------------------------------------------------------------
-    | Halaman login khusus:
+    | Digunakan oleh:
     | - PJ Lab
     | - Guru
     | - Kepala Madrasah
     |
-    | Login siswa menggunakan halaman dan controller terpisah.
+    | Login siswa menggunakan halaman terpisah.
     */
 
     public function showLogin(): View
@@ -32,18 +32,19 @@ class LoginController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | 2. MEMPROSES LOGIN
+    | 2. MEMPROSES LOGIN PENGELOLA
     |--------------------------------------------------------------------------
-    | Autentikasi menggunakan email dan password.
+    | Login menggunakan email dan password.
+    | Hanya akun aktif yang diizinkan masuk.
     */
 
     public function login(Request $request): RedirectResponse
     {
         /*
-        | Validasi input
+        | Validasi input form
         */
 
-        $credentials = $request->validate([
+        $validated = $request->validate([
             'email' => [
                 'required',
                 'email',
@@ -56,48 +57,46 @@ class LoginController extends Controller
             ],
         ]);
 
-
         /*
         | Normalisasi email
         */
 
         $email = mb_strtolower(
-            trim($credentials['email'])
+            trim($validated['email'])
         );
 
-
         /*
-        | Autentikasi Laravel
+        | Proses autentikasi Laravel.
+        | Akun nonaktif akan ditolak.
         */
 
-        $success = Auth::attempt([
+        $authenticated = Auth::attempt([
             'email' => $email,
-            'password' => $credentials['password'],
+            'password' => $validated['password'],
+            'is_active' => 1,
         ], $request->boolean('remember'));
 
-
         /*
-        | Jika email atau password salah
+        | Jika email/password salah atau akun tidak aktif
         */
 
-        if (!$success) {
-
+        if (!$authenticated) {
             throw ValidationException::withMessages([
-                'email' => 'Email atau password salah.',
+                'email' =>
+                    'Email atau password salah, atau akun tidak aktif.',
             ]);
-
         }
-
 
         /*
         | Ambil pengguna yang berhasil login
         */
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-
         /*
-        | Batasi role login pengelola
+        | Batasi akses login pengelola.
+        | Akun siswa tidak boleh login di sini.
         */
 
         $allowedRoles = [
@@ -106,36 +105,28 @@ class LoginController extends Controller
             User::ROLE_KAMAD,
         ];
 
-
-        /*
-        | Jika role tidak diizinkan
-        | Contoh: siswa mencoba login melalui halaman pengelola
-        */
-
         if (!in_array($user->role, $allowedRoles, true)) {
 
             Auth::logout();
 
             $request->session()->invalidate();
-
             $request->session()->regenerateToken();
 
             throw ValidationException::withMessages([
-                'email' => 'Email atau password salah.',
+                'email' =>
+                    'Akun tidak memiliki akses login pengelola.',
             ]);
-
         }
 
-
         /*
-        | Regenerasi session untuk keamanan
+        | Regenerasi session untuk mencegah
+        | session fixation.
         */
 
         $request->session()->regenerate();
 
-
         /*
-        | Arahkan langsung ke dashboard berdasarkan role
+        | Redirect langsung berdasarkan role.
         */
 
         return redirect()->route(
@@ -146,7 +137,7 @@ class LoginController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | 3. MENENTUKAN ROUTE DASHBOARD BERDASARKAN ROLE
+    | 3. MENENTUKAN DASHBOARD BERDASARKAN ROLE
     |--------------------------------------------------------------------------
     */
 
@@ -161,7 +152,6 @@ class LoginController extends Controller
             User::ROLE_KAMAD => 'kamad.dashboard',
 
             default => 'login',
-
         };
     }
 
@@ -175,11 +165,10 @@ class LoginController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         /*
-        | Hapus autentikasi pengguna
+        | Keluar dari autentikasi Laravel
         */
 
         Auth::logout();
-
 
         /*
         | Hapus session lama
@@ -187,16 +176,14 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
 
-
         /*
         | Perbarui CSRF token
         */
 
         $request->session()->regenerateToken();
 
-
         /*
-        | Kembali ke halaman login pengelola
+        | Kembali ke halaman login
         */
 
         return redirect()->route('login');

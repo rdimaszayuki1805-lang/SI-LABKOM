@@ -1,4 +1,3 @@
-
 <aside class="sidebar" id="sidebar">
 
     <!-- SIDEBAR HEADER -->
@@ -18,11 +17,7 @@
 
         </div>
 
-        <button
-            type="button"
-            class="sidebar-close"
-            id="sidebarClose"
-            aria-label="Tutup sidebar">
+        <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Tutup sidebar">
 
             <i class="bi bi-x-lg"></i>
 
@@ -39,12 +34,9 @@
             MENU UTAMA
         </div>
 
-        <a
-            href="{{ route('pjlab.dashboard') }}"
+        <a href="{{ route('pjlab.dashboard') }}"
             class="sidebar-link {{ request()->routeIs('pjlab.dashboard') ? 'active' : '' }}"
-            @if(request()->routeIs('pjlab.dashboard'))
-                aria-current="page"
-            @endif>
+            @if (request()->routeIs('pjlab.dashboard')) aria-current="page" @endif>
 
             <i class="bi bi-grid-1x2"></i>
             <span>Dashboard</span>
@@ -58,8 +50,7 @@
         </div>
 
         <!-- INVENTARIS -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'inventaris']) }}"
+        <a href="{{ route('pjlab.menu', ['menu' => 'inventaris']) }}"
             class="sidebar-link {{ request()->route('menu') === 'inventaris' ? 'active' : '' }}">
 
             <i class="bi bi-hdd-stack"></i>
@@ -69,8 +60,7 @@
 
 
         <!-- OPERASIONAL -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'operasional']) }}"
+        <a href="{{ route('pjlab.menu', ['menu' => 'operasional']) }}"
             class="sidebar-link {{ request()->route('menu') === 'operasional' ? 'active' : '' }}">
 
             <i class="bi bi-calendar-week"></i>
@@ -80,8 +70,7 @@
 
 
         <!-- MONITORING -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'monitoring']) }}"
+        <a href="{{ route('pjlab.menu', ['menu' => 'monitoring']) }}"
             class="sidebar-link {{ request()->route('menu') === 'monitoring' ? 'active' : '' }}">
 
             <i class="bi bi-clipboard-check"></i>
@@ -91,8 +80,7 @@
 
 
         <!-- LOGBOOK -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'logbook']) }}"
+        <a href="{{ route('pjlab.menu', ['menu' => 'logbook']) }}"
             class="sidebar-link {{ request()->route('menu') === 'logbook' ? 'active' : '' }}">
 
             <i class="bi bi-journal-text"></i>
@@ -107,8 +95,7 @@
         </div>
 
         <!-- LAPORAN -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'laporan']) }}"
+        <a href="{{ route('pjlab.menu', ['menu' => 'laporan']) }}"
             class="sidebar-link {{ request()->route('menu') === 'laporan' ? 'active' : '' }}">
 
             <i class="bi bi-file-earmark-bar-graph"></i>
@@ -117,20 +104,22 @@
         </a>
 
 
-        <!-- MANAJEMEN PENGGUNA -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'pengguna']) }}"
-            class="sidebar-link {{ request()->route('menu') === 'pengguna' ? 'active' : '' }}">
+
+        <!-- MANAJEMEN PENGGUNA GURU DAN KAMAD -->
+        <a href="{{ route('pjlab.pengguna.index') }}"
+            class="sidebar-link {{ request()->routeIs('pjlab.pengguna.*') ? 'active' : '' }}"
+            @if (request()->routeIs('pjlab.pengguna.*')) aria-current="page" @endif>
 
             <i class="bi bi-people"></i>
+
             <span>Manajemen Pengguna</span>
 
         </a>
 
 
+
         <!-- MANAJEMEN PENGGUNA LOGBOOK -->
-        <a
-            href="{{ route('pjlab.menu', ['menu' => 'pengguna-logbook']) }}"
+        <a href="{{ route('pjlab.menu', ['menu' => 'pengguna-logbook']) }}"
             class="sidebar-link {{ request()->route('menu') === 'pengguna-logbook' ? 'active' : '' }}">
 
             <i class="bi bi-mortarboard"></i>
@@ -170,15 +159,11 @@
 
 
         <!-- LOGOUT -->
-        <form
-            action="{{ route('logout') }}"
-            method="POST">
+        <form action="{{ route('logout') }}" method="POST">
 
             @csrf
 
-            <button
-                type="submit"
-                class="sidebar-logout">
+            <button type="submit" class="sidebar-logout">
 
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Logout</span>
