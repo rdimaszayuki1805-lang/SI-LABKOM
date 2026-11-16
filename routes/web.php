@@ -2,8 +2,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PjLab\PenggunaController;
+use App\Http\Controllers\PjLab\SiswaLogbookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +20,10 @@ use App\Http\Controllers\PjLab\PenggunaController;
 |--------------------------------------------------------------------------
 | 1. LANDING PAGE
 |--------------------------------------------------------------------------
-| Halaman utama dapat diakses oleh semua pengunjung.
 */
 
 Route::get('/', function () {
-
     return view('landing');
-
 })->name('landing');
 
 
@@ -32,31 +31,19 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 | 2. LOGIN PENGELOLA
 |--------------------------------------------------------------------------
-| Login untuk:
-| - Penanggung Jawab Laboratorium (PJ Lab)
-| - Guru
-| - Kepala Madrasah (Kamad)
-|
+| Login untuk PJ Lab, Guru, dan Kepala Madrasah.
 | Menggunakan email dan password.
 */
 
 Route::middleware('guest')->group(function () {
 
-    /*
-    | Menampilkan halaman login.
-    */
-
+    // Halaman login
     Route::get('/login', [
         LoginController::class,
         'showLogin'
     ])->name('login');
 
-
-    /*
-    | Memproses login pengelola.
-    | Maksimal 5 percobaan per menit.
-    */
-
+    // Proses login
     Route::post('/login', [
         LoginController::class,
         'login'
@@ -71,14 +58,12 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 | 3. LOGIN SISWA (SEMENTARA)
 |--------------------------------------------------------------------------
-| Nantinya login siswa menggunakan NISN dan password.
-| Autentikasi siswa akan dibuat terpisah.
+| Login siswa menggunakan NISN dan password
+| akan dibuat dengan autentikasi tersendiri.
 */
 
 Route::get('/siswa/login', function () {
-
     return view('siswa.auth.login');
-
 })->name('siswa.login');
 
 
@@ -86,13 +71,10 @@ Route::get('/siswa/login', function () {
 |--------------------------------------------------------------------------
 | 4. LOGBOOK SISWA (SEMENTARA)
 |--------------------------------------------------------------------------
-| Belum menampilkan data pribadi siswa.
 */
 
 Route::get('/logbook-siswa', function () {
-
     return 'Halaman Logbook Siswa belum tersedia.';
-
 })->name('logbook.siswa');
 
 
@@ -100,7 +82,6 @@ Route::get('/logbook-siswa', function () {
 |--------------------------------------------------------------------------
 | 5. LOGOUT PENGELOLA
 |--------------------------------------------------------------------------
-| Hanya pengguna yang sudah login yang dapat logout.
 */
 
 Route::post('/logout', [
@@ -115,16 +96,8 @@ Route::post('/logout', [
 |--------------------------------------------------------------------------
 | 6. DASHBOARD DAN FITUR PJ LAB
 |--------------------------------------------------------------------------
-| Hanya akun aktif dengan role PJ Lab yang dapat mengakses.
-|
-| PJ Lab memiliki akses untuk mengelola:
-| - Inventaris perangkat
-| - Operasional laboratorium
-| - Monitoring dan kendala
-| - Logbook siswa
-| - Laporan laboratorium
-| - Akun Guru dan Kepala Madrasah
-| - Akun Logbook Siswa (fitur mendatang)
+| Semua route di dalam grup ini hanya dapat
+| diakses oleh akun PJ Lab yang aktif.
 */
 
 Route::middleware([
@@ -144,42 +117,39 @@ Route::middleware([
     */
 
     Route::get('/dashboard', function () {
-
         return view('pjlab.dashboard');
-
     })->name('dashboard');
 
 
     /*
     |--------------------------------------------------------------------------
-    | MANAJEMEN PENGGUNA
+    | MANAJEMEN PENGGUNA GURU DAN KAMAD
     |--------------------------------------------------------------------------
-    | PJ Lab mengelola akun Guru dan Kepala Madrasah.
-    | Akun utama PJ Lab dilindungi dari edit dan hapus.
+    | PJ Lab dapat membuat, mengedit, dan menghapus akun
+    | Guru serta Kepala Madrasah.
+    |
+    | Akun utama PJ Lab dilindungi di controller/model.
     */
 
-    // Menampilkan daftar pengguna
+    // Daftar akun Guru dan Kamad
     Route::get('/pengguna', [
         PenggunaController::class,
         'index'
     ])->name('pengguna.index');
 
-
-    // Menambah akun Guru atau Kepala Madrasah
+    // Tambah akun Guru dan Kamad
     Route::post('/pengguna', [
         PenggunaController::class,
         'store'
     ])->name('pengguna.store');
 
-
-    // Mengedit data pengguna dan mengganti password
+    // Edit akun dan reset password
     Route::patch('/pengguna/{user}', [
         PenggunaController::class,
         'update'
     ])->name('pengguna.update');
 
-
-    // Menghapus akun Guru atau Kepala Madrasah
+    // Hapus akun
     Route::delete('/pengguna/{user}', [
         PenggunaController::class,
         'destroy'
@@ -188,47 +158,88 @@ Route::middleware([
 
     /*
     |--------------------------------------------------------------------------
-    | MENU SIDEBAR PJ LAB
+    | MANAJEMEN PENGGUNA LOGBOOK (SISWA)
     |--------------------------------------------------------------------------
-    | Menu yang belum dikembangkan menggunakan placeholder.
+    | Hanya PJ Lab yang dapat:
+    | - Melihat daftar siswa berdasarkan kelas
+    | - Menambahkan siswa manual
+    | - Mengimpor siswa dari Excel
+    | - Mengedit nama, NISN, dan password
+    | - Menghapus akun siswa
+    |--------------------------------------------------------------------------
+    */
+
+    // Download template Excel
+    Route::get('/pengguna-logbook/template', [
+        SiswaLogbookController::class,
+        'template'
+    ])->name('siswa.template');
+
+
+    // Daftar siswa berdasarkan kelas
+    Route::get('/pengguna-logbook/{kelas?}', [
+        SiswaLogbookController::class,
+        'index'
+    ])->name('siswa.index');
+
+
+    // Tambah siswa secara manual
+    Route::post('/pengguna-logbook', [
+        SiswaLogbookController::class,
+        'store'
+    ])->name('siswa.store');
+
+
+    // Import siswa dari Excel
+    Route::post('/pengguna-logbook/import', [
+        SiswaLogbookController::class,
+        'import'
+    ])->name('siswa.import');
+
+
+    // Edit data siswa dan reset password
+    Route::patch('/pengguna-logbook/siswa/{siswa}', [
+        SiswaLogbookController::class,
+        'update'
+    ])->name('siswa.update');
+
+
+    // Hapus akun siswa
+    Route::delete('/pengguna-logbook/siswa/{siswa}', [
+        SiswaLogbookController::class,
+        'destroy'
+    ])->name('siswa.destroy');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MENU SIDEBAR PJ LAB LAINNYA
+    |--------------------------------------------------------------------------
+    | Menu yang belum dikembangkan masih menggunakan
+    | halaman placeholder.
+    |
+    | Manajemen Pengguna dan Manajemen Siswa
+    | sudah mempunyai route tersendiri.
     */
 
     Route::get('/menu/{menu}', function (string $menu) {
 
         $menus = [
+            'inventaris' => 'Inventaris Perangkat',
 
-            'inventaris' =>
-                'Inventaris Perangkat',
+            'operasional' => 'Operasional Laboratorium',
 
-            'operasional' =>
-                'Operasional Laboratorium',
+            'monitoring' => 'Monitoring dan Kendala',
 
-            'monitoring' =>
-                'Monitoring dan Kendala',
+            'logbook' => 'Logbook Siswa',
 
-            'logbook' =>
-                'Logbook Siswa',
-
-            'laporan' =>
-                'Laporan Laboratorium',
-
-            'pengguna-logbook' =>
-                'Manajemen Pengguna Logbook (Siswa)',
-
+            'laporan' => 'Laporan Laboratorium',
         ];
-
-        /*
-        | Pastikan nama menu tersedia.
-        */
 
         abort_unless(
             array_key_exists($menu, $menus),
             404
         );
-
-        /*
-        | Tampilkan halaman sementara PJ Lab.
-        */
 
         return view('pjlab.pages.placeholder', [
             'judul' => $menus[$menu],
@@ -244,13 +255,7 @@ Route::middleware([
 |--------------------------------------------------------------------------
 | 7. DASHBOARD DAN FITUR GURU
 |--------------------------------------------------------------------------
-| Hanya akun aktif dengan role Guru yang dapat mengakses.
-|
-| Layout:
-| resources/views/layouts/guru.blade.php
-|
-| CSS:
-| resources/css/pjlab.css
+| Hanya dapat diakses oleh akun Guru yang aktif.
 */
 
 Route::middleware([
@@ -270,9 +275,7 @@ Route::middleware([
     */
 
     Route::get('/dashboard', function () {
-
         return view('guru.dashboard');
-
     })->name('dashboard');
 
 
@@ -280,39 +283,22 @@ Route::middleware([
     |--------------------------------------------------------------------------
     | MENU SIDEBAR GURU
     |--------------------------------------------------------------------------
-    | Guru dapat melihat jadwal, melakukan pengajuan
-    | penggunaan laboratorium, dan memantau logbook kelas.
-    |
-    | Untuk sementara halaman masih berupa placeholder.
     */
 
     Route::get('/menu/{menu}', function (string $menu) {
 
         $menus = [
+            'jadwal' => 'Jadwal Laboratorium',
 
-            'jadwal' =>
-                'Jadwal Laboratorium',
+            'pengajuan' => 'Pengajuan Penggunaan',
 
-            'pengajuan' =>
-                'Pengajuan Penggunaan',
-
-            'logbook' =>
-                'Logbook Kelas',
-
+            'logbook' => 'Logbook Kelas',
         ];
-
-        /*
-        | Tolak nama menu yang tidak terdaftar.
-        */
 
         abort_unless(
             array_key_exists($menu, $menus),
             404
         );
-
-        /*
-        | Tampilkan halaman sementara Guru.
-        */
 
         return view('guru.pages.placeholder', [
             'judul' => $menus[$menu],
@@ -328,24 +314,10 @@ Route::middleware([
 |--------------------------------------------------------------------------
 | 8. DASHBOARD DAN FITUR KEPALA MADRASAH
 |--------------------------------------------------------------------------
-| Hanya akun aktif dengan role Kamad yang dapat mengakses.
+| Kepala Madrasah hanya memiliki akses read-only.
 |
-| Kepala Madrasah memiliki hak akses READ-ONLY.
-|
-| Dapat melihat:
-| - Dashboard
-| - Inventaris Perangkat
-| - Penggunaan Laboratorium
-| - Monitoring dan Kendala
-| - Laporan Laboratorium
-|
-| Tidak disediakan route tambah, edit, atau hapus data.
-|
-| Layout:
-| resources/views/layouts/kamad.blade.php
-|
-| CSS:
-| resources/css/pjlab.css
+| Tidak ada route untuk membuat, mengubah,
+| atau menghapus data laboratorium.
 */
 
 Route::middleware([
@@ -365,9 +337,7 @@ Route::middleware([
     */
 
     Route::get('/dashboard', function () {
-
         return view('kamad.dashboard');
-
     })->name('dashboard');
 
 
@@ -375,40 +345,24 @@ Route::middleware([
     |--------------------------------------------------------------------------
     | MENU SIDEBAR KEPALA MADRASAH
     |--------------------------------------------------------------------------
-    | Seluruh halaman bersifat read-only.
-    | Fitur masih menggunakan placeholder.
     */
 
     Route::get('/menu/{menu}', function (string $menu) {
 
         $menus = [
+            'inventaris' => 'Inventaris Perangkat',
 
-            'inventaris' =>
-                'Inventaris Perangkat',
+            'penggunaan' => 'Penggunaan Laboratorium',
 
-            'penggunaan' =>
-                'Penggunaan Laboratorium',
+            'monitoring' => 'Monitoring dan Kendala',
 
-            'monitoring' =>
-                'Monitoring dan Kendala',
-
-            'laporan' =>
-                'Laporan Laboratorium',
-
+            'laporan' => 'Laporan Laboratorium',
         ];
-
-        /*
-        | Pastikan nama menu terdaftar.
-        */
 
         abort_unless(
             array_key_exists($menu, $menus),
             404
         );
-
-        /*
-        | Menampilkan halaman sementara Kamad.
-        */
 
         return view('kamad.pages.placeholder', [
             'judul' => $menus[$menu],

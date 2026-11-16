@@ -118,17 +118,55 @@
 
 
 
-        <!-- MANAJEMEN PENGGUNA LOGBOOK -->
-        <a href="{{ route('pjlab.menu', ['menu' => 'pengguna-logbook']) }}"
-            class="sidebar-link {{ request()->route('menu') === 'pengguna-logbook' ? 'active' : '' }}">
 
-            <i class="bi bi-mortarboard"></i>
+        <!-- ==========================================
+     MANAJEMEN PENGGUNA LOGBOOK SISWA
+========================================== -->
 
-            <span>
-                Manajemen Pengguna Logbook (Siswa)
-            </span>
+        @php
+            $kelasLogbook = ['7A', '7B', '7C', '7D', '8A', '8B', '8C', '8D', '9A', '9C', '9D'];
 
-        </a>
+            $sedangDiMenuSiswa = request()->routeIs('pjlab.siswa.*');
+
+            $kelasAktif = request()->route('kelas') ?? '7A';
+        @endphp
+
+        <details class="pjlab-siswa-menu" @if ($sedangDiMenuSiswa) open @endif>
+
+            <summary
+                class="sidebar-link pjlab-siswa-menu-toggle
+               {{ $sedangDiMenuSiswa ? 'active' : '' }}">
+
+                <i class="bi bi-people-fill"></i>
+
+                <span>
+                    Manajemen Pengguna Logbook (Siswa)
+                </span>
+
+                <i class="bi bi-chevron-down pjlab-siswa-chevron"></i>
+
+            </summary>
+
+            <!-- PILIHAN KELAS -->
+            <div class="pjlab-siswa-submenu">
+
+                @foreach ($kelasLogbook as $kelasItem)
+                    <a href="{{ route('pjlab.siswa.index', ['kelas' => $kelasItem]) }}"
+                        class="pjlab-siswa-sublink
+                       {{ $sedangDiMenuSiswa && $kelasAktif === $kelasItem ? 'active' : '' }}">
+
+                        <i class="bi bi-mortarboard"></i>
+
+                        <span>
+                            Kelas {{ $kelasItem }}
+                        </span>
+
+                    </a>
+                @endforeach
+
+            </div>
+
+        </details>
 
     </nav>
 
