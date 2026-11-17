@@ -1,0 +1,575 @@
+
+/* =====================================================
+   SI-LABKOM - LOGIN DAN LOGBOOK SISWA
+===================================================== */
+
+:root {
+    --s-primary: #2f855a;
+    --s-primary-dark: #236947;
+    --s-soft: #eaf7ef;
+    --s-dark: #1f2937;
+    --s-muted: #6b7280;
+    --s-border: #e2e8e4;
+    --s-background: #f7faf8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body.siswa-body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--s-background);
+    color: var(--s-dark);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.siswa-container {
+    width: calc(100% - 36px);
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+
+.siswa-header {
+    background: #ffffff;
+    border-top: 4px solid var(--s-primary);
+    border-bottom: 1px solid var(--s-border);
+}
+
+.siswa-header-inner {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.siswa-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-decoration: none;
+}
+
+.siswa-logos {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.siswa-logo {
+    width: 43px;
+    height: 43px;
+    object-fit: contain;
+}
+
+.siswa-logo-divider {
+    height: 35px;
+    width: 1px;
+    background: var(--s-border);
+}
+
+.siswa-brand-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--s-dark);
+}
+
+.siswa-brand-subtitle {
+    font-size: 11px;
+    color: var(--s-muted);
+    margin-top: 4px;
+}
+
+.siswa-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 13px;
+    border: 1px solid var(--s-border);
+    border-radius: 9px;
+    color: #53635b;
+    background: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.siswa-back:hover {
+    color: var(--s-primary);
+    background: #f6fbf8;
+}
+
+/* LOGIN */
+
+.siswa-login-section {
+    min-height: calc(100vh - 82px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 16px;
+}
+
+.siswa-login-wrapper {
+    width: 100%;
+    max-width: 440px;
+}
+
+.siswa-login-heading {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.siswa-login-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--s-soft);
+    color: var(--s-primary);
+    border-radius: 16px;
+    font-size: 25px;
+}
+
+.siswa-login-heading h1 {
+    font-size: 23px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+.siswa-login-heading p {
+    font-size: 13px;
+    color: var(--s-muted);
+    line-height: 1.7;
+}
+
+.siswa-card {
+    padding: 26px;
+    border-radius: 15px;
+    border: 1px solid var(--s-border);
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(35,80,55,.055);
+}
+
+.siswa-card + .siswa-card {
+    margin-top: 20px;
+}
+
+.siswa-card-title {
+    margin: 0 0 20px;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--s-dark);
+}
+
+.siswa-card-title i {
+    color: var(--s-primary);
+    margin-right: 7px;
+}
+
+/* FORM */
+
+.siswa-field {
+    margin-bottom: 18px;
+}
+
+.siswa-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #37453f;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.siswa-input-wrap {
+    position: relative;
+}
+
+.siswa-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9aa7a0;
+    pointer-events: none;
+}
+
+.siswa-input,
+.siswa-select,
+.siswa-textarea {
+    display: block;
+    width: 100%;
+    min-height: 45px;
+    padding: 11px 13px;
+    border: 1px solid #dde5e0;
+    border-radius: 9px;
+    background: #ffffff;
+    color: var(--s-dark);
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.siswa-input.with-icon {
+    padding-left: 41px;
+}
+
+.siswa-input.with-toggle {
+    padding-right: 49px;
+}
+
+.siswa-input:focus,
+.siswa-select:focus,
+.siswa-textarea:focus {
+    outline: none;
+    border-color: #73ae8b;
+    box-shadow: 0 0 0 3px rgba(47,133,90,.08);
+}
+
+.siswa-textarea {
+    resize: vertical;
+    min-height: 115px;
+}
+
+.siswa-password-toggle {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: #8d9a93;
+    cursor: pointer;
+}
+
+.siswa-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 45px;
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--s-primary);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.siswa-button:hover {
+    background: var(--s-primary-dark);
+}
+
+.siswa-button-full {
+    width: 100%;
+}
+
+.siswa-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 12px;
+    margin-top: 19px;
+    border: 1px solid #e1eae4;
+    border-radius: 9px;
+    background: #f6faf7;
+    color: #718078;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.siswa-info i {
+    color: var(--s-primary);
+}
+
+.siswa-alert {
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 9px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.siswa-alert-success {
+    background: #effaf2;
+    border: 1px solid #cfe6d5;
+    color: #23774f;
+}
+
+.siswa-alert-danger {
+    background: #fff1f1;
+    border: 1px solid #f0cccc;
+    color: #a63131;
+}
+
+/* LOGBOOK */
+
+.siswa-main {
+    padding-top: 35px;
+    padding-bottom: 60px;
+}
+
+.siswa-page-heading {
+    margin-bottom: 23px;
+}
+
+.siswa-page-heading h1 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.siswa-page-heading p {
+    margin: 0;
+    color: var(--s-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.siswa-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 18px;
+}
+
+.siswa-grid-full {
+    grid-column: 1 / -1;
+}
+
+.siswa-readonly {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 11px 13px;
+    border: 1px solid #dce9df;
+    border-radius: 9px;
+    background: #f5faf7;
+    font-size: 13px;
+    color: #34483c;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.siswa-jam {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--s-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.siswa-table-wrap {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.siswa-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.siswa-table th,
+.siswa-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--s-border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.siswa-table th {
+    background: #f7faf8;
+    font-weight: 700;
+}
+
+.siswa-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--s-muted);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+    .siswa-header-inner {
+        min-height: 70px;
+    }
+
+    .siswa-logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    .siswa-brand-title {
+        font-size: 12px;
+    }
+
+    .siswa-brand-subtitle,
+    .siswa-back-text {
+        display: none;
+    }
+
+    .siswa-card {
+        padding: 19px;
+    }
+
+    .siswa-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .siswa-grid-full {
+        grid-column: auto;
+    }
+
+    .siswa-page-heading h1 {
+        font-size: 21px;
+    }
+}
+
+/* =====================================================
+   PEMBARUAN FORM LOGBOOK SISWA
+===================================================== */
+
+.logbook-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 28px 0 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8e4;
+    color: #173c31;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.logbook-section-title i {
+    color: #2f855a;
+}
+
+.logbook-help {
+    display: block;
+    margin-top: 6px;
+    color: #8a9b92;
+    font-size: 11px;
+}
+
+.logbook-condition-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.logbook-condition-card {
+    padding: 16px;
+    border: 1px solid #e0e8e2;
+    border-radius: 13px;
+    background: #fcfdfc;
+}
+
+.logbook-condition-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 13px;
+    color: #254239;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.logbook-condition-heading i {
+    color: #2f855a;
+}
+
+.logbook-radio-options {
+    display: flex;
+    gap: 8px;
+}
+
+.logbook-radio-label {
+    position: relative;
+    flex: 1;
+    cursor: pointer;
+}
+
+.logbook-radio-label input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.logbook-radio-face {
+    min-height: 41px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border: 1px solid #dce5de;
+    border-radius: 9px;
+    background: #fff;
+    color: #66766d;
+    font-size: 12px;
+    font-weight: 600;
+    transition: .18s ease;
+}
+
+.logbook-radio-label input:checked + .logbook-radio-face {
+    background: #eaf7ef;
+    border-color: #83c39f;
+    color: #23774f;
+}
+
+.logbook-radio-label input:focus-visible + .logbook-radio-face {
+    outline: 2px solid #2f855a;
+    outline-offset: 2px;
+}
+
+.logbook-radio-label input:checked[value="Rusak"]
++ .logbook-radio-face {
+    background: #fff1f0;
+    border-color: #e7a29b;
+    color: #b74336;
+}
+
+.logbook-kendala-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0 20px;
+}
+
+.logbook-kendala-options .logbook-radio-label {
+    flex: 0 1 104px;
+}
+
+.logbook-kendala-description {
+    margin-top: 14px;
+}
+
+.logbook-submit-note {
+    margin-top: 12px;
+    color: #8a9b92;
+    font-size: 11px;
+    line-height: 1.65;
+}
+
+@media (max-width: 850px) {
+    .logbook-condition-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .logbook-condition-grid {
+        grid-template-columns: 1fr;
+    }
+}
