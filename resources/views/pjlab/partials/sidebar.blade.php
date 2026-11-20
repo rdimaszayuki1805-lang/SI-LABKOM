@@ -59,14 +59,19 @@
         </a>
 
 
-        <!-- OPERASIONAL -->
-        <a href="{{ route('pjlab.menu', ['menu' => 'operasional']) }}"
-            class="sidebar-link {{ request()->route('menu') === 'operasional' ? 'active' : '' }}">
 
-            <i class="bi bi-calendar-week"></i>
-            <span>Operasional Laboratorium</span>
+        <!-- OPERASIONAL LABORATORIUM -->
+        <a href="{{ route('pjlab.operasional.index') }}"
+            class="sidebar-link {{ request()->routeIs('pjlab.operasional.*') ? 'active' : '' }}">
+
+            <i class="bi bi-calendar-check"></i>
+
+            <span>
+                Operasional Laboratorium
+            </span>
 
         </a>
+
 
 
         <!-- MONITORING -->
