@@ -1,0 +1,511 @@
+
+/* ==========================================================
+   SI-LABKOM - GURU.CSS
+   Desain khusus Panel Guru
+   Mengikuti gaya antarmuka PJ Lab
+========================================================== */
+
+:root {
+    --guru-primary: #25835b;
+    --guru-primary-dark: #176b49;
+    --guru-primary-soft: #eaf5ee;
+
+    --guru-text: #203f34;
+    --guru-muted: #84968b;
+
+    --guru-bg: #f6f8f7;
+    --guru-white: #ffffff;
+    --guru-border: #e3eae5;
+
+    --guru-danger: #d72e35;
+    --guru-danger-soft: #fff4f4;
+
+    --guru-sidebar-width: 305px;
+    --guru-topbar-height: 76px;
+}
+
+/* ==========================================================
+   RESET DAN LAYOUT
+========================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--guru-bg);
+}
+
+.guru-shell {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.guru-shell .main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ==========================================================
+   SIDEBAR GURU
+========================================================== */
+
+.guru-shell #sidebar.guru-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    width: var(--guru-sidebar-width);
+    height: 100vh;
+    height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    background: var(--guru-white);
+    border-right: 1px solid var(--guru-border);
+
+    color: var(--guru-text);
+    overflow: hidden;
+    z-index: 1050;
+}
+
+/* ==========================================================
+   BRAND / IDENTITAS
+========================================================== */
+
+.guru-sidebar .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    min-height: 102px;
+
+    padding: 18px 20px;
+    margin: 0;
+
+    border-bottom: 1px solid var(--guru-border);
+    flex-shrink: 0;
+}
+
+.guru-sidebar .sidebar-brand-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: var(--guru-primary-soft);
+    color: var(--guru-primary);
+
+    border-radius: 13px;
+    font-size: 24px;
+}
+
+.guru-sidebar .sidebar-brand-text {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.guru-sidebar .sidebar-brand-text strong {
+    display: block;
+    color: #143d2c;
+
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.guru-sidebar .sidebar-brand-text small {
+    display: block;
+    color: var(--guru-muted);
+
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.guru-sidebar .sidebar-close {
+    width: 30px;
+    height: 30px;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 0;
+    margin-left: auto;
+
+    border: 0;
+    background: transparent;
+    color: #688477;
+
+    cursor: pointer;
+    font-size: 19px;
+}
+
+/* ==========================================================
+   BAGIAN MENU UTAMA
+========================================================== */
+
+.guru-sidebar .guru-sidebar-content {
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 22px 14px;
+}
+
+.guru-sidebar .sidebar-menu-title {
+    display: block;
+
+    padding: 0 12px;
+    margin: 0 0 12px;
+
+    color: #90a399;
+
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.6;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.guru-sidebar .sidebar-menu-group {
+    margin-bottom: 27px;
+}
+
+.guru-sidebar .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    gap: 5px;
+}
+
+.guru-sidebar .sidebar-link {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 49px;
+
+    padding: 12px 15px;
+    margin: 0;
+
+    gap: 14px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: #415d50;
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.45;
+
+    text-align: left;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.guru-sidebar .sidebar-link i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+
+    flex-shrink: 0;
+
+    font-size: 18px;
+    color: #718d7d;
+}
+
+.guru-sidebar .sidebar-link span {
+    display: block;
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.guru-sidebar .sidebar-link:hover {
+    background: #f1f8f4;
+    color: var(--guru-primary-dark);
+}
+
+.guru-sidebar .sidebar-link:hover i {
+    color: var(--guru-primary);
+}
+
+/* MENU AKTIF */
+
+.guru-sidebar .sidebar-link.active {
+    background: var(--guru-primary-soft);
+    color: var(--guru-primary-dark);
+    font-weight: 700;
+
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.guru-sidebar .sidebar-link.active i {
+    color: var(--guru-primary);
+}
+
+/* ==========================================================
+   BAGIAN BAWAH: PROFIL DAN LOGOUT
+========================================================== */
+
+.guru-sidebar .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    flex-shrink: 0;
+
+    padding: 16px 17px 18px;
+    margin: 0;
+
+    background: var(--guru-white);
+    border-top: 1px solid var(--guru-border);
+}
+
+/* PROFIL */
+
+.guru-sidebar .sidebar-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+    width: 100%;
+
+    padding: 0 0 13px;
+    margin: 0;
+}
+
+.guru-sidebar .sidebar-profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+    background: var(--guru-primary-soft);
+    color: var(--guru-primary);
+
+    font-size: 19px;
+}
+
+.guru-sidebar .sidebar-profile-info {
+    display: flex;
+    flex-direction: column;
+
+    flex: 1;
+    min-width: 0;
+    gap: 3px;
+}
+
+.guru-sidebar .sidebar-profile-info strong {
+    color: #153d2d;
+
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.4;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.guru-sidebar .sidebar-profile-info small {
+    color: var(--guru-muted);
+
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+/* LOGOUT */
+
+.guru-sidebar .sidebar-bottom form {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.guru-sidebar .sidebar-logout {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    min-height: 47px;
+    padding: 11px 13px;
+
+    background: var(--guru-danger-soft);
+    border: 1px solid #f4d9dc;
+    border-radius: 10px;
+
+    color: var(--guru-danger);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.guru-sidebar .sidebar-logout i {
+    color: var(--guru-danger);
+}
+
+.guru-sidebar .sidebar-logout:hover {
+    background: #ffe9eb;
+    color: #b51e28;
+    border-color: #f0bdc3;
+}
+
+.guru-sidebar .sidebar-logout:hover i {
+    color: #b51e28;
+}
+
+/* ==========================================================
+   MAIN CONTENT
+========================================================== */
+
+.guru-shell .main-content {
+    margin-left: var(--guru-sidebar-width);
+    width: calc(100% - var(--guru-sidebar-width));
+    min-height: 100vh;
+}
+
+/* ==========================================================
+   OVERLAY MOBILE
+========================================================== */
+
+.guru-shell .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(10, 30, 20, 0.45);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+
+    z-index: 1040;
+}
+
+.guru-shell .sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* ==========================================================
+   FOCUS DAN SCROLLBAR
+========================================================== */
+
+.guru-sidebar .sidebar-link:focus-visible,
+.guru-sidebar .sidebar-close:focus-visible {
+    outline: 2px solid var(--guru-primary);
+    outline-offset: 2px;
+}
+
+.guru-sidebar .guru-sidebar-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.guru-sidebar .guru-sidebar-content::-webkit-scrollbar-thumb {
+    background: #d7e3db;
+    border-radius: 10px;
+}
+
+/* ==========================================================
+   RESPONSIVE TABLET / MOBILE
+========================================================== */
+
+@media (max-width: 991.98px) {
+
+    .guru-shell #sidebar.guru-sidebar {
+        left: 0;
+        width: min(305px, 86vw);
+
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+
+        box-shadow: none;
+    }
+
+    .guru-shell #sidebar.guru-sidebar.show {
+        transform: translateX(0);
+
+        box-shadow:
+            8px 0 35px rgba(12, 40, 25, 0.16);
+    }
+
+    .guru-shell .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .guru-sidebar .sidebar-close {
+        display: inline-flex;
+    }
+}
+
+@media (min-width: 992px) {
+
+    .guru-shell #sidebar.guru-sidebar {
+        transform: none;
+    }
+
+    .guru-shell .sidebar-overlay {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .guru-sidebar .sidebar-brand {
+        padding: 16px;
+    }
+
+    .guru-sidebar .guru-sidebar-content {
+        padding: 20px 12px;
+    }
+
+    .guru-sidebar .sidebar-bottom {
+        padding: 14px 13px;
+    }
+}

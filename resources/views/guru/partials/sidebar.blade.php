@@ -1,10 +1,7 @@
 
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar guru-sidebar" id="sidebar">
 
-    <!-- ==========================================
-         IDENTITAS SIDEBAR
-    ========================================== -->
-
+    <!-- HEADER / BRAND -->
     <div class="sidebar-brand">
 
         <div class="sidebar-brand-icon">
@@ -12,11 +9,8 @@
         </div>
 
         <div class="sidebar-brand-text">
-
             <strong>SI-LABKOM</strong>
-
             <small>Panel Guru</small>
-
         </div>
 
         <button
@@ -31,103 +25,85 @@
 
     </div>
 
-
-    <!-- ==========================================
-         NAVIGASI SIDEBAR
-    ========================================== -->
-
-    <nav class="sidebar-nav" aria-label="Navigasi Guru">
+    <!-- KONTEN MENU -->
+    <div class="guru-sidebar-content">
 
         <!-- MENU UTAMA -->
-        <div class="sidebar-section-title">
-            MENU UTAMA
+        <div class="sidebar-menu-group">
+
+            <div class="sidebar-menu-title">
+                MENU UTAMA
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Menu Utama">
+
+                <!-- DASHBOARD -->
+                <a
+                    href="{{ route('guru.dashboard') }}"
+                    class="sidebar-link {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
+
+                    <i class="bi bi-grid-1x2"></i>
+                    <span>Dashboard</span>
+
+                </a>
+
+            </nav>
+
         </div>
-
-        <!-- DASHBOARD -->
-        <a
-            href="{{ route('guru.dashboard') }}"
-            class="sidebar-link {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}"
-            @if(request()->routeIs('guru.dashboard'))
-                aria-current="page"
-            @endif>
-
-            <i class="bi bi-grid-1x2"></i>
-
-            <span>Dashboard</span>
-
-        </a>
-
 
         <!-- PENGELOLAAN LABORATORIUM -->
-        <div class="sidebar-section-title">
-            PENGELOLAAN LABORATORIUM
+        <div class="sidebar-menu-group">
+
+            <div class="sidebar-menu-title">
+                PENGELOLAAN LABORATORIUM
+            </div>
+
+            <nav
+                class="sidebar-nav"
+                aria-label="Pengelolaan Laboratorium">
+
+                <!-- OPERASIONAL LABORATORIUM -->
+                <a
+                    href="{{ route('guru.operasional.index') }}"
+                    class="sidebar-link {{ request()->routeIs('guru.operasional.*') ? 'active' : '' }}">
+
+                    <i class="bi bi-calendar-check"></i>
+
+                    <span>Operasional Laboratorium</span>
+
+                </a>
+
+                <!-- RIWAYAT -->
+                <a
+                    href="{{ route('guru.menu', ['menu' => 'riwayat']) }}"
+                    class="sidebar-link {{ request()->routeIs('guru.riwayat') || (request()->routeIs('guru.menu') && request()->route('menu') === 'riwayat') ? 'active' : '' }}">
+
+                    <i class="bi bi-clock-history"></i>
+
+                    <span>Riwayat</span>
+
+                </a>
+
+            </nav>
+
         </div>
 
+    </div>
 
-        <!-- JADWAL LABORATORIUM -->
-        <a
-            href="{{ route('guru.menu', ['menu' => 'jadwal']) }}"
-            class="sidebar-link {{ request()->routeIs('guru.menu') && request()->route('menu') === 'jadwal' ? 'active' : '' }}"
-            @if(request()->routeIs('guru.menu') && request()->route('menu') === 'jadwal')
-                aria-current="page"
-            @endif>
+    <!-- PROFIL DAN LOGOUT DI BAWAH -->
+    <div class="sidebar-bottom">
 
-            <i class="bi bi-calendar-week"></i>
+        <!-- PROFIL GURU -->
+        <div class="sidebar-profile">
 
-            <span>Jadwal Laboratorium</span>
-
-        </a>
-
-
-        <!-- PENGAJUAN PENGGUNAAN -->
-        <a
-            href="{{ route('guru.menu', ['menu' => 'pengajuan']) }}"
-            class="sidebar-link {{ request()->routeIs('guru.menu') && request()->route('menu') === 'pengajuan' ? 'active' : '' }}"
-            @if(request()->routeIs('guru.menu') && request()->route('menu') === 'pengajuan')
-                aria-current="page"
-            @endif>
-
-            <i class="bi bi-file-earmark-plus"></i>
-
-            <span>Pengajuan Penggunaan</span>
-
-        </a>
-
-
-        <!-- LOGBOOK KELAS -->
-        <a
-            href="{{ route('guru.menu', ['menu' => 'logbook']) }}"
-            class="sidebar-link {{ request()->routeIs('guru.menu') && request()->route('menu') === 'logbook' ? 'active' : '' }}"
-            @if(request()->routeIs('guru.menu') && request()->route('menu') === 'logbook')
-                aria-current="page"
-            @endif>
-
-            <i class="bi bi-journal-text"></i>
-
-            <span>Logbook Kelas</span>
-
-        </a>
-
-    </nav>
-
-
-    <!-- ==========================================
-         FOOTER SIDEBAR
-    ========================================== -->
-
-    <div class="sidebar-footer">
-
-        <!-- INFORMASI AKUN -->
-        <div class="sidebar-user">
-
-            <div class="sidebar-avatar">
+            <div class="sidebar-profile-avatar">
                 <i class="bi bi-person"></i>
             </div>
 
-            <div class="sidebar-user-info">
+            <div class="sidebar-profile-info">
 
                 <strong>
-                    {{ auth()->user()->name }}
+                    {{ auth()->user()?->name ?? 'Guru' }}
                 </strong>
 
                 <small>Guru</small>
@@ -136,17 +112,16 @@
 
         </div>
 
-
         <!-- LOGOUT -->
         <form
-            method="POST"
-            action="{{ route('logout') }}">
+            action="{{ route('logout') }}"
+            method="POST">
 
             @csrf
 
             <button
                 type="submit"
-                class="sidebar-logout">
+                class="sidebar-link sidebar-logout">
 
                 <i class="bi bi-box-arrow-right"></i>
 
